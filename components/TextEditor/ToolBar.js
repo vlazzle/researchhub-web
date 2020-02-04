@@ -2,6 +2,7 @@ import { css, StyleSheet } from "aphrodite";
 import colors from "../../config/themes/colors";
 import FormButton from "../Form/Button";
 import Loader from "../Loader/Loader";
+import PermissionNotificationWrapper from "../PermissionNotificationWrapper";
 
 export const Button = (props) => {
   const { active, onMouseDown, first, smallToolBar } = props;
