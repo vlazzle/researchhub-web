@@ -66,8 +66,8 @@ export const ToolBar = (props) => {
           ) : (
             <PermissionNotificationWrapper
               onClick={props.submit}
-              modalMessage={this.props.modalMessage}
-              permissionKey={this.props.permissionKey}
+              modalMessage={props.modalMessage}
+              permissionKey={props.permissionKey}
               loginRequired={true}
             >
               <FormButton
