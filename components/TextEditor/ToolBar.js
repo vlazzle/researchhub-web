@@ -64,19 +64,12 @@ export const ToolBar = (props) => {
               }
             />
           ) : (
-            <PermissionNotificationWrapper
-              onClick={props.submit}
-              modalMessage={props.modalMessage}
-              permissionKey={props.permissionKey}
-              loginRequired={true}
-            >
-              <FormButton
-                label="Submit"
-                customButtonStyle={
-                  props.smallToolBar ? styles.smallButton : styles.buttonStyle
-                }
-              />
-            </PermissionNotificationWrapper>
+            <FormButton
+              label="Submit"
+              customButtonStyle={
+                props.smallToolBar ? styles.smallButton : styles.buttonStyle
+              }
+            />
           ))}
       </div>
     </div>
