@@ -2,10 +2,16 @@ branch-defaults:
   development:
     environment: production2
     group_suffix: null
+  discussion-unfurl:
+    environment: production2
   mainnet:
     environment: staging-web
   master:
     environment: production2
+environment-defaults:
+  production2:
+    branch: null
+    repository: null
 global:
   application_name: researchhub-web
   branch: null
