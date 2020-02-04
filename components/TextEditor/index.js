@@ -27,6 +27,8 @@ const TextEditor = (props) => {
     openLoginModal,
     passedValue,
     onChange,
+    permissionKey,
+    modalMessage,
     hideButton,
     showDiff,
     previousVersion,
@@ -97,6 +99,8 @@ const TextEditor = (props) => {
       containerStyles={containerStyles}
       cancel={cancel}
       submit={submit}
+      permissionKey={permissionKey}
+      modalMessage={modalMessage}
       commentEditor={commentEditor}
       value={passedValue ? passedValue : value}
       hideButton={hideButton}

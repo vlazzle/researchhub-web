@@ -186,6 +186,8 @@ class RichTextEditor extends React.Component {
             {!this.props.readOnly && (
               <ToolBar
                 cancel={this.props.cancel}
+                permissionKey={this.props.permissionKey}
+                modalMessage={this.props.modalMessage}
                 submit={this.props.submit}
                 hideButton={this.props.hideButton}
                 hideCancelButton={

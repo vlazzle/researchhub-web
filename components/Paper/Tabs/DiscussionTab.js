@@ -71,7 +71,7 @@ const DiscussionTab = (props) => {
   );
   const [transition, setTransition] = useState(false);
   const [addView, toggleAddView] = useState(false);
-  const [showEditor, setShowEditor] = useState(false);
+  const [showEditor, setShowEditor] = useState(true);
   const [editorDormant, setEditorDormant] = useState(true);
   const [discussion, setDiscussion] = useState(initialDiscussionState);
   const [mobileView, setMobileView] = useState(false);
@@ -149,7 +149,7 @@ const DiscussionTab = (props) => {
   const cancel = () => {
     setDiscussion(initialDiscussionState);
     setEditorDormant(true);
-    setShowEditor(false);
+    // setShowEditor(false);
     document.body.style.overflow = "scroll";
     props.openAddDiscussionModal(false);
   };
@@ -242,7 +242,7 @@ const DiscussionTab = (props) => {
           </span>
         )}
 
-        <PermissionNotificationWrapper
+        {/* <PermissionNotificationWrapper
           onClick={() => {
             setShowEditor(true);
           }}
@@ -258,7 +258,7 @@ const DiscussionTab = (props) => {
           >
             Add Discussion
           </button>
-        </PermissionNotificationWrapper>
+        </PermissionNotificationWrapper> */}
       </div>
     );
   };
@@ -288,8 +288,11 @@ const DiscussionTab = (props) => {
             <TextEditor
               canEdit={true}
               readOnly={false}
+              hideCancelButton={true}
               onChange={handleDiscussionTextEditor}
               // hideButton={editorDormant}
+              permissionKey={"CreateDiscussionThread"}
+              modalMessage={"create a discussion thread"}
               placeholder={"Leave a question or a comment"}
               initialValue={discussion.question}
               commentEditor={true}
@@ -623,8 +626,8 @@ const stylesEditor = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     marginBottom: 10,
-    backgroundColor: colors.LIGHT_YELLOW(),
-    boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+    backgroundColor: "#fff",
+    border: "1px solid #ddd",
     borderRadius: 10,
   },
   container: {
