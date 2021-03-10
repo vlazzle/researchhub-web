@@ -94,6 +94,11 @@ const filterOptions = [
     label: "Most Discussed",
     href: "most-discussed",
   },
+  {
+    value: "twitter_score",
+    label: "Twitter Score",
+    href: "twitter-score",
+  },
 ];
 
 const scopeOptions = [
