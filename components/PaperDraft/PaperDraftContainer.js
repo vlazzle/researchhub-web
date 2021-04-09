@@ -86,7 +86,7 @@ function paperFetchHook({
     setIsFetching(false);
   };
 
-  fetchPaperDraft({ paperId })
+  return fetchPaperDraft({ paperId })
     .then(Helpers.checkStatus)
     .then(Helpers.parseJSON)
     .then(handleFetchSuccess)

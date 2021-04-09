@@ -36,8 +36,8 @@ const htmlToBlock = (nodeName, node, idsToRemove) => {
       };
 
     case "abstract":
-    case "fig":
-    case "graphic":
+    // case "fig":
+    // case "graphic":
     case "front":
     case "back":
     case "journal":
