@@ -54,6 +54,7 @@ import {
 } from "~/config/utils/";
 import * as shims from "~/redux/paper/shims";
 import PaperBanner from "../../../../components/Paper/PaperBanner";
+import FigureTab from "../../../../components/Paper/Tabs/FigureTab";
 
 const isServer = () => typeof window === "undefined";
 
@@ -520,6 +521,22 @@ const Paper = (props) => {
                     userVoteChecked={userVoteChecked}
                   />
                 </a>
+              </Waypoint>
+            </div>
+            <div
+              className={css(
+                styles.paperPageContainer,
+                styles.bottom,
+                styles.noMarginLeft,
+                !paperDraftExists && styles.hide
+              )}
+            >
+              <Waypoint
+                onEnter={() => onSectionEnter(2)}
+                topOffset={40}
+                bottomOffset={"95%"}
+              >
+                <FigureTab paperId={paperId} />
               </Waypoint>
             </div>
             <div

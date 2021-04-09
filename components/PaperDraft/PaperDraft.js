@@ -19,6 +19,10 @@ import icons from "~/config/themes/icons";
 
 import "~/components/Paper/Tabs/stylesheets/paper.css";
 
+const ImageBlock = ({ block, blockProps, contentState }) => {
+  return <img className={css(styles.imageBlock)} src={blockProps.src}></img>;
+};
+
 class PaperDraft extends React.Component {
   constructor(props) {
     super(props);
@@ -65,6 +69,21 @@ class PaperDraft extends React.Component {
         return this.state.isReadOnly ? this.editor.blur() : this.editor.focus();
       }
     );
+  };
+
+  customBlockRenderer = (contentBlock) => {
+    const type = contentBlock.getType();
+    if (type === "image") {
+      let data = contentBlock.getData();
+      let src = data.get("url");
+      return {
+        component: ImageBlock,
+        editable: false,
+        props: {
+          src,
+        },
+      };
+    }
   };
 
   onCancel = () => {
@@ -161,6 +180,7 @@ class PaperDraft extends React.Component {
           <div className={css(!isReadOnly && styles.editorActive)}>
             <Editor
               {...textEditorProps}
+              blockRendererFn={this.customBlockRenderer}
               readOnly={isReadOnly} // setting this to false will grant me access to selection
               ref={(ref) => (this.editor = ref)}
             />
@@ -196,6 +216,9 @@ class PaperDraft extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  imageBlock: {
+    width: "100%",
+  },
   root: {
     width: "100%",
     position: "relative",

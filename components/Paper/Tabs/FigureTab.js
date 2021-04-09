@@ -29,6 +29,7 @@ class FigureTab extends React.Component {
       figures: this.props.figures ? this.props.figures : [],
       currentSlideIndex: 0,
       fetching: true,
+      figureCount: 0,
       file: null,
       // Pending Submission
       inputView: false,
@@ -38,7 +39,8 @@ class FigureTab extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ fetching: false });
+    // this.setState({ fetching: false });
+    this.fetchFigures();
   }
 
   componentDidUpdate(prevProps) {
@@ -61,8 +63,8 @@ class FigureTab extends React.Component {
           this.setState({
             figures: res.data,
           });
-          this.props.setFigureCount(res.data.length);
-          this.props.updatePaperState("figures", res.data);
+          this.setState({ figureCount: res.data.length });
+          // this.props.updatePaperState("figures", res.data);
           this.setState({ fetching: false });
         });
     });
@@ -274,21 +276,20 @@ class FigureTab extends React.Component {
 
   render() {
     return (
-      <ComponentWrapper overrideStyle={styles.componentWrapperStyles}>
-        <div
-          className={css(styles.container)}
-          id="figures-tab"
-          onMouseEnter={() => this.setHovered(true)}
-          onMouseLeave={() => this.setHovered(false)}
-        >
-          <div className={css(styles.header)}>
-            <div className={css(styles.sectionTitle)}>
-              Figures
-              <span className={css(styles.count)}>
+      <div
+        className={css(styles.container)}
+        id="figures-tab"
+        onMouseEnter={() => this.setHovered(true)}
+        onMouseLeave={() => this.setHovered(false)}
+      >
+        <div className={css(styles.header)}>
+          <div className={css(styles.sectionTitle)}>
+            Figures
+            {/* <span className={css(styles.count)}>
                 {this.state.figures.length}
-              </span>
-            </div>
-            <div className={css(styles.headerRow)}>
+              </span> */}
+          </div>
+          {/* <div className={css(styles.headerRow)}>
               <Ripples
                 className={css(styles.item)}
                 onClick={() =>
@@ -312,33 +313,32 @@ class FigureTab extends React.Component {
                 </span>
                 Add Figure
               </Ripples>
-            </div>
-          </div>
-          <div className={css(styles.figuresWrapper)}>
-            {this.state.figures.length > 0 && (
-              <FsLightbox
-                toggler={this.state.toggleLightbox}
-                type="image"
-                sources={this.state.figures.map((figure) => figure.file)}
-                slide={this.state.slideIndex}
-              />
-            )}
-            {this.state.fetching ? (
-              <div className={css(styles.figures)}>
-                <div className={css(styles.image)}>
-                  <ReactPlaceholder
-                    ready={false}
-                    showLoadingAnimation
-                    customPlaceholder={<PreviewPlaceholder color="#efefef" />}
-                  />
-                </div>
-              </div>
-            ) : (
-              this.renderContent()
-            )}
-          </div>
+            </div> */}
         </div>
-      </ComponentWrapper>
+        <div className={css(styles.figuresWrapper)}>
+          {this.state.figures.length > 0 && (
+            <FsLightbox
+              toggler={this.state.toggleLightbox}
+              type="image"
+              sources={this.state.figures.map((figure) => figure.file)}
+              slide={this.state.slideIndex}
+            />
+          )}
+          {this.state.fetching ? (
+            <div className={css(styles.figures)}>
+              <div className={css(styles.image)}>
+                <ReactPlaceholder
+                  ready={false}
+                  showLoadingAnimation
+                  customPlaceholder={<PreviewPlaceholder color="#efefef" />}
+                />
+              </div>
+            </div>
+          ) : (
+            this.renderContent()
+          )}
+        </div>
+      </div>
     );
   }
 }
@@ -360,10 +360,9 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "#fff",
-    padding: 50,
-    border: "1.5px solid #F0F0F0",
+    // padding: 50,
+    // border: "1.5px solid #F0F0F0",
     boxSizing: "border-box",
-    boxShadow: "0px 3px 4px rgba(0, 0, 0, 0.02)",
     borderRadius: 4,
     "@media only screen and (max-width: 767px)": {
       padding: 25,

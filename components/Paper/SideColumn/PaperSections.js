@@ -43,19 +43,20 @@ const PaperSections = (props) => {
     const maintabs = [
       { name: "Main", index: 0 },
       { name: "Abstract", index: 1 },
-      { name: "Discussion", index: 2 },
-      { name: "Paper PDF", index: 3 },
+      { name: "Figures", index: 2 },
+      { name: "Discussion", index: 3 },
+      { name: "Paper PDF", index: 4 },
     ];
 
     if (paperDraftExists) {
-      maintabs.splice(2, 0, { name: "Paper", index: 2 });
+      maintabs.splice(3, 0, { name: "Paper", index: 3 });
       maintabs.forEach((section, i) => {
         section.index = i;
       });
     }
 
     if (paperDraftSections && paperDraftSections.length) {
-      maintabs.splice(3, 0, ...paperDraftSections);
+      maintabs.splice(4, 0, ...paperDraftSections);
     }
 
     const isMainTab = (name) => {
@@ -65,6 +66,7 @@ const PaperSections = (props) => {
         case "Discussion":
         case "Paper PDF":
         case "Paper":
+        case "Figures":
           return true;
         default:
           return false;
@@ -72,10 +74,10 @@ const PaperSections = (props) => {
     };
 
     const isPaperSectionActive = (index) => {
-      const offset = 3;
+      const offset = 4;
 
       return (
-        paperDraftExists && activeTab === 2 && activeSection == index - offset
+        paperDraftExists && activeTab === 3 && activeSection == index - offset
       );
     };
 
@@ -90,7 +92,7 @@ const PaperSections = (props) => {
             onClick={() => handleClick(index)}
           >
             <div className={css(styles.name) + " clamp1"}>{name}</div>
-            {paperDraftExists && index === 2 && (
+            {paperDraftExists && index === 3 && (
               <div
                 className={css(styles.button)}
                 onClick={(e) => {

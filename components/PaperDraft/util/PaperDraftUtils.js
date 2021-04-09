@@ -34,10 +34,17 @@ const htmlToBlock = (nodeName, node, idsToRemove) => {
         type: "paragraph",
         data: {},
       };
+    // case "graphic":
+    //   return {
+    //     type: "image",
+    //     data: {
+    //       url: node.attributes[0].value
+    //     },
+    //   }
 
     case "abstract":
-    // case "fig":
-    // case "graphic":
+    case "fig":
+    case "graphic":
     case "front":
     case "back":
     case "journal":
