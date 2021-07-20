@@ -29,7 +29,13 @@ export const getActivityMetadata = (activity) => {
 
   let href, hrefAs;
   let postId, postTitle;
+  if (contributionType === "SUPPORTER") {
+    console.log(source);
+    console.log(sourceType);
+  }
   switch (contributionType) {
+    case "SUPPORTER":
+      postId = source.object_id;
     case "SUBMITTER":
       postId = source.id;
       // If it's a submission, then the post title depends on whether it is a paper of discusison,
@@ -42,6 +48,7 @@ export const getActivityMetadata = (activity) => {
   }
 
   switch (sourceType) {
+    // case ""
     case "PAPER":
       href = "/paper/[paperId]/[paperName]";
       postTitle = postTitle ? postTitle : source.paper_title;
