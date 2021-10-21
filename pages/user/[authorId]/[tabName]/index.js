@@ -340,8 +340,8 @@ function AuthorPage(props) {
     } else if (!prevProps && auth.isLoggedIn) {
       let papers = store.getState().author.authoredPapers.papers;
       checkUserVotes(papers, "authored");
-      let contributions = store.getState().author.userContributions
-        .contributions;
+      let contributions =
+        store.getState().author.userContributions.contributions;
       checkUserVotes(contributions, "contributions");
     }
     setPrevProps(auth.isLoggedIn);
@@ -1034,7 +1034,7 @@ function AuthorPage(props) {
                 className={css(styles.authorName, styles.editButtonContainer)}
                 property="name"
               >
-                { name }
+                {name}
               </h1>
               {userLinks}
             </div>
@@ -1082,12 +1082,12 @@ function AuthorPage(props) {
   );
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
+// export async function getStaticPaths() {
+//   return {
+//     paths: [],
+//     fallback: "blocking",
+//   };
+// }
 
 const fetchAuthor = ({ authorId }) => {
   return fetch(API.AUTHOR({ authorId }), API.GET_CONFIG())
@@ -1095,7 +1095,7 @@ const fetchAuthor = ({ authorId }) => {
     .then(Helpers.parseJSON);
 };
 
-export async function getStaticProps(ctx) {
+export async function getServerSideProps(ctx) {
   const { authorId } = ctx.params;
   const fetchedAuthor = await fetchAuthor({ authorId });
 
@@ -1112,7 +1112,6 @@ export async function getStaticProps(ctx) {
     props: {
       fetchedAuthor,
     },
-    revalidate: 600,
   };
 }
 
@@ -1145,13 +1144,13 @@ const styles = StyleSheet.create({
     },
   },
   modActions: {
-    marginLeft: 'auto',
-    display: 'flex',
+    marginLeft: "auto",
+    display: "flex",
 
     "@media only screen and (max-width: 767px)": {
-      marginLeft: 'unset',
+      marginLeft: "unset",
       marginTop: 16,
-    }
+    },
   },
   moderatorButton: {
     display: "flex",
@@ -1286,7 +1285,7 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 15,
     justifyContent: "center",
-    flexDirection: 'column',
+    flexDirection: "column",
     width: "100%",
     color: "#241F3A",
     lineHeight: 1.5,
@@ -1725,7 +1724,4 @@ const mapDispatchToProps = {
   showMessage: MessageActions.showMessage,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AuthorPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorPage);
