@@ -28,7 +28,16 @@ const DiscussionThreadCard = (props) => {
   const dispatch = useDispatch();
   const store = useStore();
   const router = useRouter();
-  const { hostname, hoverEvents, paperId, path, postId, mobileView } = props;
+  const {
+    hostname,
+    hoverEvents,
+    paperId,
+    path,
+    postId,
+    mobileView,
+    goToDiscussion,
+    discussionContainerStyle,
+  } = props;
   const DYNAMIC_HREF = paperId
     ? "/paper/[paperId]/[paperName]"
     : "/post/[documentId]/[title]";
@@ -46,7 +55,7 @@ const DiscussionThreadCard = (props) => {
   if (data) {
     threadId = data.id;
     commentCount = data.commentCount;
-    date = data.createdDate;
+    date = data.createdDate || data.created_date;
     title = data.title;
     body = data.text;
     username = createUsername(data);
@@ -93,19 +102,19 @@ const DiscussionThreadCard = (props) => {
     }
   }
 
-  const goToDiscussion = () => {};
-
   if (mobileView) {
     return (
       <div
         className={css(
           styles.discussionContainer,
-          props.newCard && styles.newCard
+          props.newCard && styles.newCard,
+          props.className
         )}
         onClick={goToDiscussion}
       >
         <DiscussionCard
           mobileView={true}
+          containerStyle={discussionContainerStyle}
           top={
             <div className={css(styles.column)}>
               <div className={css(styles.row, styles.spaceBetween)}>
@@ -126,7 +135,7 @@ const DiscussionThreadCard = (props) => {
                 </span>
               </div>
               <DiscussionPostMetadata
-                authorProfile={data && data.createdBy.authorProfile}
+                authorProfile={data?.createdBy?.authorProfile}
                 username={username}
                 date={date}
                 data={data}
@@ -162,11 +171,13 @@ const DiscussionThreadCard = (props) => {
       <div
         className={css(
           styles.discussionContainer,
-          props.newCard && styles.newCard
+          props.newCard && styles.newCard,
+          props.className
         )}
         onClick={goToDiscussion}
       >
         <DiscussionCard
+          containerStyle={discussionContainerStyle}
           top={
             <Fragment>
               <VoteWidget
@@ -180,7 +191,10 @@ const DiscussionThreadCard = (props) => {
                 promoted={false}
               />
               <DiscussionPostMetadata
-                authorProfile={data && data.createdBy.authorProfile}
+                authorProfile={
+                  data?.createdBy?.authorProfile ||
+                  data?.created_by?.author_profile
+                }
                 username={username}
                 date={date}
                 data={data}

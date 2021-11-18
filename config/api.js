@@ -126,6 +126,23 @@ const routes = (BASE_URL) => {
       return `${BASE_URL}organization/${orgId}/update_user_permission/`;
     },
 
+    COMMENTS: ({ commentIds, commentTypes, route }) => {
+      let url = BASE_URL + "comments/";
+
+      let params = {
+        querystring: {
+          comment_ids: commentIds,
+          comment_types: commentTypes,
+        },
+        rest: {
+          route: route,
+        },
+      };
+      url = prepURL(url, params);
+
+      return url;
+    },
+
     USER: ({
       userId,
       authorId,
@@ -134,6 +151,7 @@ const routes = (BASE_URL) => {
       invitedBy,
       page,
       hubIds,
+      commentsOnly,
     }) => {
       let url = BASE_URL + "user/";
 
@@ -142,6 +160,7 @@ const routes = (BASE_URL) => {
           referral_code: referralCode,
           invited_by: invitedBy,
           author_profile: authorId,
+          comments_only: commentsOnly,
           hub_ids: hubIds ? hubIds.join(",") : "",
           page,
         },

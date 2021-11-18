@@ -1,4 +1,8 @@
-import { fetchUnifiedDocFeed } from "../../../config/fetch";
+import {
+  fetchCommentsUserVote,
+  fetchFeedComments,
+  fetchUnifiedDocFeed,
+} from "../../../config/fetch";
 import {
   emptyFncWithMsg,
   filterNull,
@@ -109,6 +113,32 @@ export const fetchUserVote = (unifiedDocs = [], isLoggedIn, authToken) => {
     });
 };
 
+export const getCommentTypes = (comments) => {
+  let commentIds = [];
+  let commentTypes = [];
+  for (let i = 0; i < comments.length; i++) {
+    commentIds.push(comments[i].source.id);
+
+    // TODO: get the proper source
+    commentTypes.push("thread");
+  }
+
+  return {
+    commentIds,
+    commentTypes,
+  };
+};
+
+const addVotesToComments = (comments, votes) => {
+  let newComments = [...comments];
+  for (let i = 0; i < newComments.length; i++) {
+    newComments[i].document_type = "comment";
+    newComments[i].user_vote = votes[i];
+  }
+
+  return newComments;
+};
+
 export default function fetchUnifiedDocs({
   docTypeFilter,
   hubID,
@@ -134,21 +164,17 @@ export default function fetchUnifiedDocs({
     }
   */
 
-  const PARAMS = {
-    hubId: hubID,
-    ordering: filterBy.value,
-    page,
-    subscribedHubs,
-    timePeriod: calculateTimeScope(scope),
-    type: docTypeFilter,
-  };
-  fetchUnifiedDocFeed(PARAMS)
-    .then(async (res) => {
-      const { count, next, results: fetchedUnifiedDocs } = res;
-      const voteFormattedDocs = await fetchUserVote(
-        filterNull(fetchedUnifiedDocs),
-        isLoggedIn
-      );
+  if (docTypeFilter === "comments") {
+    fetchFeedComments({ hubIds: [hubID] }).then(async (res) => {
+      const { count, next, results } = res;
+      const { commentIds, commentTypes } = getCommentTypes(results);
+      const voteRes = await fetchCommentsUserVote({
+        commentIds,
+        commentTypes,
+      });
+
+      const voteFormattedDocs = addVotesToComments(results, voteRes.votes);
+
       onSuccess({
         count,
         page,
@@ -156,11 +182,36 @@ export default function fetchUnifiedDocs({
         documents: voteFormattedDocs,
         prevDocuments,
       });
-    })
-    .catch((err) => {
-      // If we get a 401 error it means the token is expired.
-      const { response } = err;
-      onError(err);
-      Sentry.captureException(err);
     });
+  } else {
+    const PARAMS = {
+      hubId: hubID,
+      ordering: filterBy.value,
+      page,
+      subscribedHubs,
+      timePeriod: calculateTimeScope(scope),
+      type: docTypeFilter,
+    };
+    fetchUnifiedDocFeed(PARAMS)
+      .then(async (res) => {
+        const { count, next, results: fetchedUnifiedDocs } = res;
+        const voteFormattedDocs = await fetchUserVote(
+          filterNull(fetchedUnifiedDocs),
+          isLoggedIn
+        );
+        onSuccess({
+          count,
+          page,
+          hasMore: !isNullOrUndefined(next),
+          documents: voteFormattedDocs,
+          prevDocuments,
+        });
+      })
+      .catch((err) => {
+        // If we get a 401 error it means the token is expired.
+        const { response } = err;
+        onError(err);
+        Sentry.captureException(err);
+      });
+  }
 }

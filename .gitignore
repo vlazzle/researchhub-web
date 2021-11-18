@@ -31,3 +31,5 @@ yarn-error.log*
 .eslintcache
 .eslintcache/*
 .vercel
+
+node_modules.nosync

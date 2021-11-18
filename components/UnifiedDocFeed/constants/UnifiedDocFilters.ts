@@ -4,6 +4,7 @@ export const UnifiedDocFilters = {
   PAPER: "paper",
   POSTS: "posts",
   HYPOTHESIS: "hypothesis",
+  COMMENTS: "comments",
 };
 
 export const UnifiedDocFilterLabels = {
@@ -11,4 +12,5 @@ export const UnifiedDocFilterLabels = {
   HYPOTHESIS: "Hypotheses",
   PAPER: "Papers",
   POSTS: "Posts",
+  COMMENTS: "Comments",
 };

@@ -422,6 +422,38 @@ export const fetchLatestActivity = ({ hubIds }) => {
     });
 };
 
+export const fetchFeedComments = ({ hubIds }) => {
+  return fetch(
+    API.USER({
+      route: "following_latest_activity",
+      hubIds,
+      commentsOnly: true,
+    }),
+    API.GET_CONFIG()
+  )
+    .then(Helpers.checkStatus)
+    .then(Helpers.parseJSON)
+    .catch((_) => {
+      return { error: true };
+    });
+};
+
+export const fetchCommentsUserVote = ({ commentIds, commentTypes }) => {
+  return fetch(
+    API.COMMENTS({
+      route: "check_user_vote",
+      commentIds,
+      commentTypes,
+    }),
+    API.GET_CONFIG()
+  )
+    .then(Helpers.checkStatus)
+    .then(Helpers.parseJSON)
+    .catch((_) => {
+      return { error: true };
+    });
+};
+
 export const followUser = ({ userId, followeeId }) => {
   const PAYLOAD = {
     followee_id: followeeId,
