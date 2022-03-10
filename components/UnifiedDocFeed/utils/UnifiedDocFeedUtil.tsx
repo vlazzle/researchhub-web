@@ -16,6 +16,8 @@ export type UniDocFetchParams = {
   subFilters: any;
   subscribedHubs: Boolean;
   hotV2: Boolean;
+  nonceRef?: any;
+  nonce?: string;
 };
 
 export type PaginationInfo = {
@@ -102,19 +104,36 @@ export const useEffectPrefetchNext = ({
   ]);
 };
 
+function makeid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * 
+charactersLength));
+ }
+ return result;
+}
+
 export const useEffectForceUpdate = ({
   fetchParams,
   updateOn,
   setUnifiedDocsLoading,
   firstLoad,
+  nonceRef,
 }: {
   fetchParams: UniDocFetchParams;
   updateOn: any[];
   setUnifiedDocsLoading: any;
   firstLoad: any;
+  nonceRef: any;
 }): void => {
   useEffect((): void => {
+    const nonce = makeid(16);
+    nonceRef.current = nonce;
     if (firstLoad?.current) {
+      fetchParams.nonceRef = nonceRef;
+      fetchParams.nonce = nonce;
       setUnifiedDocsLoading && setUnifiedDocsLoading(true);
       fetchUnifiedDocs(fetchParams);
     } else if (firstLoad) {

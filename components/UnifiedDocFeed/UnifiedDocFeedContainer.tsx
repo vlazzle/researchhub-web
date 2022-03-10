@@ -44,6 +44,7 @@ function UnifiedDocFeedContainer({
   serverLoadedData, // Loaded on the server via getInitialProps on full page load
   subscribeButton,
 }): ReactElement<"div"> {
+  const nonceRef = useRef(null);
   const router = useRouter();
   const routerPathName = router.pathname;
   const [docTypeFilter, setDocTypeFilter] = useState<string>(
@@ -88,6 +89,7 @@ function UnifiedDocFeedContainer({
 
   /* Force update when hubs or docType changes. start from page 1 */
   useEffectForceUpdate({
+    nonceRef,
     fetchParams: {
       ...fetchParamsWithoutCallbacks,
       onError: (error: Error): void => {

@@ -117,6 +117,8 @@ export default function fetchUnifiedDocs({
   subFilters,
   prevDocuments = [],
   hotV2,
+  nonceRef,
+  nonce,
 }) {
   const { filterBy, scope } = subFilters;
   /* PARAMS is: 
@@ -148,13 +150,16 @@ export default function fetchUnifiedDocs({
         filterNull(fetchedUnifiedDocs),
         isLoggedIn
       );
-      onSuccess({
-        count,
-        page,
-        hasMore: !isNullOrUndefined(next),
-        documents: voteFormattedDocs,
-        prevDocuments,
-      });
+
+      if (nonceRef.current === nonce) {
+        onSuccess({
+          count,
+          page,
+          hasMore: !isNullOrUndefined(next),
+          documents: voteFormattedDocs,
+          prevDocuments,
+        });
+      }
     })
     .catch((err) => {
       // If we get a 401 error it means the token is expired.
