@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: 3,
+    padding: "4px 7px",
     borderRadius: 40,
     width: 48,
     boxSizing: "border-box",

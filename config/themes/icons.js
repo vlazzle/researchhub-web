@@ -533,7 +533,7 @@ export const PaperDiscussionIcon = ({
         overrideStyle && overrideStyle
       )}
     >
-      {icons.chat}
+      {icons.comments}
     </span>
   );
 };

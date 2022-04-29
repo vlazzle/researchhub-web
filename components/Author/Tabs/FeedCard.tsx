@@ -23,6 +23,8 @@ import ScoreInput from "~/components/Form/ScoreInput";
 import ALink from "~/components/ALink";
 import PeerReviewScoreSummary from "~/components/PeerReviews/PeerReviewScoreSummary";
 
+import DiscussionCount from "~/components/DiscussionCount";
+
 const PaperPDFModal = dynamic(
   () => import("~/components/Modals/PaperPDFModal")
 );
@@ -234,6 +236,16 @@ function FeedCard(props: FeedCardProps) {
                 score={score}
                 voteState={voteState}
               />
+              {discussion_count > 0 ? (
+                <div className={css(styles.discussionCountWrapper)}>
+                  <DiscussionCount
+                    docType="paper"
+                    slug={slug}
+                    id={id}
+                    count={discussion_count}
+                  />
+                </div>
+              ) : null}
             </div>
           </DesktopOnly>
           <div className={css(styles.container)}>
@@ -241,23 +253,25 @@ function FeedCard(props: FeedCardProps) {
               <div className={css(styles.rowContainer)}>
                 <div className={css(styles.postCreatedBy)}>
                   {uploaded_by || created_by ? (
-                    <AuthorAvatar
-                      author={
-                        created_by?.author_profile ||
-                        uploaded_by?.author_profile
-                      }
-                      boldName
-                      border="2px solid #F1F1F1"
-                      fontSize={15}
-                      size={20}
-                      spacing={5}
-                      withAuthorName
-                    />
+                    <div className={css(styles.avatarWrapper)}>
+                      <AuthorAvatar
+                        author={
+                          created_by?.author_profile ||
+                          uploaded_by?.author_profile
+                        }
+                        boldName
+                        border="2px solid #F1F1F1"
+                        fontSize={15}
+                        size={20}
+                        spacing={5}
+                        withAuthorName
+                      />
+                    </div>
                   ) : null}
                   {(uploaded_by || created_by) && hubs.length > 0 && (
-                    <div className={css(styles.textLabel)}>in</div>
+                    <div className={css(styles.textLabel)}>uploaded in</div>
                   )}
-                  {hubs?.slice(0, 1).map((tag, index) => (
+                  {hubs?.slice(0, 7).map((tag, index) => (
                     <Link href={`/hubs/${tag.slug}`}>
                       <a
                         className={css(styles.hubLabel)}
@@ -267,7 +281,15 @@ function FeedCard(props: FeedCardProps) {
                       >{`${tag.name}${resolvedHubs.length > 1 ? "," : ""}`}</a>
                     </Link>
                   ))}
-                  {resolvedHubs.length > 1 && (
+                  <div className={css(styles.textLabel, styles.noMargin)}>
+                    <span className={css(styles.metadataText)}>
+                      on{" "}
+                      {formatDateStandard(
+                        transformDate(created_date || uploaded_date)
+                      )}
+                    </span>
+                  </div>
+                  {resolvedHubs.length > 7 && (
                     <HubDropDown
                       hubs={hubs}
                       labelStyle={styles.hubLabel}
@@ -276,14 +298,6 @@ function FeedCard(props: FeedCardProps) {
                     />
                   )}
                 </div>
-                {!Boolean(previewImg) && previews.length === 0 && (
-                  <span className={css(styles.row, styles.docType)}>
-                    <span className={css(styles.metadataIcon)}>
-                      {documentIcons[formattedDocType!]}
-                    </span>
-                    <span>{formattedDocType}</span>
-                  </span>
-                )}
               </div>
               <div className={css(styles.rowContainer)}>
                 <div className={css(styles.column, styles.metaData)}>
@@ -291,7 +305,7 @@ function FeedCard(props: FeedCardProps) {
                     {titleAsHtml ? titleAsHtml : title ? title : ""}
                   </span>
                   {abstract && (
-                    <div className={css(styles.abstract) + " clamp2"}>
+                    <div className={css(styles.abstract) + " clamp1"}>
                       {abstract}
                     </div>
                   )}
@@ -309,12 +323,6 @@ function FeedCard(props: FeedCardProps) {
                       styles.publishContainer
                     )}
                   >
-                    <div className={css(styles.metadataIcon)}>{icons.date}</div>
-                    <span className={css(styles.metadataText)}>
-                      {formatDateStandard(
-                        transformDate(created_date || uploaded_date)
-                      )}
-                    </span>
                     <div
                       className={css(
                         styles.upvoteMetadata,
@@ -331,30 +339,17 @@ function FeedCard(props: FeedCardProps) {
                     >
                       <span className={css(styles.boldText)}>{score}</span>
                     </span>
-                    <div className={css(styles.metadataIcon)}>
-                      {icons.commentRegular}
-                    </div>
-                    <span className={css(styles.metadataText)}>
-                      <span className={css(styles.boldText)}>
-                        {discussion_count}
-                      </span>
-                      <span className={css(styles.hideTextMobile)}>{` Comment${
-                        discussion_count === 1 ? "" : "s"
-                      }`}</span>
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
             <div className={css(styles.column)}>
-              {(Boolean(previewImg) || previews.length > 0) && (
-                <span className={css(styles.row, styles.docType)}>
-                  <span className={css(styles.metadataIcon)}>
-                    {documentIcons[formattedDocType!]}
-                  </span>
-                  <span>{formattedDocType}</span>
+              <span className={css(styles.row, styles.docType)}>
+                <span className={css(styles.metadataIcon)}>
+                  {documentIcons[formattedDocType!]}
                 </span>
-              )}
+                <span>{formattedDocType}</span>
+              </span>
               {Boolean(previewImg) && (
                 <div className={css(styles.preview, styles.imagePreview)}>
                   <img src={previewImg} className={css(styles.image)} />
@@ -415,6 +410,14 @@ const styles = StyleSheet.create({
       backgroundColor: "#FAFAFA",
     },
   },
+  discussionCountWrapper: {
+    marginTop: 10,
+    marginRight: 15,
+    [`@media only screen and (max-width: ${breakpoints.small.str})`]: {
+      marginTop: 1,
+      display: "flex",
+    },
+  },
   noBorder: {
     borderBottom: `1px solid ${genericCardColors.BORDER}`,
     marginBottom: 0,
@@ -456,6 +459,9 @@ const styles = StyleSheet.create({
   fullWidth: {
     width: "100%",
   },
+  fullHeight: {
+    height: "100%",
+  },
   rowContainer: {
     display: "flex",
     alignItems: "flex-start",
@@ -473,6 +479,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
+  },
+  noMargin: {
+    margin: 0,
+  },
+  submittedBy: {
+    marginRight: 4,
   },
   docType: {
     color: colors.BLACK(0.5),
@@ -509,7 +521,7 @@ const styles = StyleSheet.create({
     color: colors.BLACK(0.5),
     fontSize: 14,
     marginRight: 15,
-    textTransform: "capitalize",
+    // textTransform: "capitalize",
     [`@media only screen and (max-width: ${breakpoints.mobile.str})`]: {
       fontSize: 13,
     },
@@ -568,10 +580,14 @@ const styles = StyleSheet.create({
     width: 70,
   },
   textLabel: {
-    color: colors.TEXT_GREY(),
+    color: colors.BLACK(0.5),
     fontSize: 15,
     fontWeight: 500,
     margin: "0px 5px",
+    marginLeft: 0,
+  },
+  avatarWrapper: {
+    marginRight: 5,
   },
   hubLabel: {
     color: colors.NEW_BLUE(),
