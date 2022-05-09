@@ -98,6 +98,8 @@ function FeedCard(props: FeedCardProps) {
     voteCallback,
   } = props;
 
+  console.log(props);
+
   /**
    * Whether or not THIS PaperPDFModal is open.
    * There may be many PaperPDFModal components on the page, but
@@ -304,8 +306,9 @@ function FeedCard(props: FeedCardProps) {
                   <span className={css(styles.title)}>
                     {titleAsHtml ? titleAsHtml : title ? title : ""}
                   </span>
+                  {renderableText && renderableText}
                   {abstract && (
-                    <div className={css(styles.abstract) + " clamp1"}>
+                    <div className={css(styles.abstract) + " clamp2"}>
                       {abstract}
                     </div>
                   )}
