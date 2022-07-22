@@ -96,7 +96,7 @@ function BountyModal({
 
   const showAlertText = hasMinRscAlert || hasMaxRscAlert || withPreview;
   const researchHubAmount = parseFloat(
-    ((BOUNTY_RH_PERCENTAGE / 100) * bountyAmount).toFixed(2)
+    ((BOUNTY_RH_PERCENTAGE / 100) * bountyAmount).toFixed(10)
   );
   return (
     <BaseModal
@@ -223,8 +223,8 @@ function BountyModal({
                       <span className={css(styles.valueNumber)}>
                         <span>
                           {(
-                            parseFloat(bountyAmount) +
-                            parseFloat(researchHubAmount)
+                            parseFloat(bountyAmount || "0") +
+                            parseFloat(researchHubAmount || "0")
                           ).toLocaleString()}
                         </span>
                         <ResearchCoinIcon
